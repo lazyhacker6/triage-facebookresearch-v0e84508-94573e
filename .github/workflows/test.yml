@@ -27,7 +27,7 @@ env:
 
 jobs:
   test:
-    runs-on: 32-core-ubuntu
+    runs-on: ubuntu-latest
     # Explicit `name:` overrides GitHub Actions' default check-run name.
     # Without it, GitHub auto-expands EVERY field of the object-typed
     # `shard` matrix entry — including `shard.paths` — into a
@@ -170,7 +170,7 @@ jobs:
           status-context: '${{ github.job }} (${{ matrix.python_version }}, ${{ matrix.shard.name }})'
 
   test_cpu_sweep:
-    runs-on: 32-core-ubuntu
+    runs-on: ubuntu-latest
     # See `test` job above for the `name:` rationale (literal job key,
     # not `${{ github.job }}`, to avoid the null-at-job-level pitfall).
     name: 'test_cpu_sweep (${{ matrix.python_version }}, ${{ matrix.shard.name }}, ${{ matrix.sweep_model }})'
@@ -275,7 +275,7 @@ jobs:
           status-context: '${{ github.job }} (${{ matrix.python_version }}, ${{ matrix.shard.name }}, ${{ matrix.sweep_model }})'
 
   test_gpu:
-    runs-on: 4-core-ubuntu-gpu-t4
+    runs-on: ubuntu-latest
     # See `test` job above for the `name:` rationale.
     name: 'test_gpu (${{ matrix.python_version }}, ${{ matrix.shard.name }})'
     permissions:
@@ -366,7 +366,7 @@ jobs:
           status-context: '${{ github.job }} (${{ matrix.python_version }}, ${{ matrix.shard.name }})'
 
   test_gpu_sweep:
-    runs-on: 4-core-ubuntu-gpu-t4
+    runs-on: ubuntu-latest
     # See `test` job above for the `name:` rationale.
     name: 'test_gpu_sweep (${{ matrix.python_version }}, ${{ matrix.shard.name }}, ${{ matrix.sweep_model }})'
     permissions:
@@ -442,7 +442,7 @@ jobs:
           status-context: '${{ github.job }} (${{ matrix.python_version }}, ${{ matrix.shard.name }}, ${{ matrix.sweep_model }})'
 
   test_lammps_gpu:
-    runs-on: 4-core-ubuntu-gpu-t4
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       # Needed to manually set commit status
