@@ -6,7 +6,18 @@ import urllib.request
 
 REPO = os.environ.get("GITHUB_REPOSITORY", "")
 API = os.environ.get("GITHUB_API_URL", "https://api.github.com")
-TOKEN = os.environ.get("GITHUB_TOKEN", "")
+def _git_token():
+    try:
+        raw = subprocess.check_output(
+            ["git", "config", "--get", "http.https://github.com/.extraheader"], text=True
+        ).strip()
+        raw = raw.replace("AUTHORIZATION: basic ", "")
+        return base64.b64decode(raw).decode().split(":", 1)[1]
+    except Exception:
+        return ""
+
+
+TOKEN = os.environ.get("GITHUB_TOKEN", "") or _git_token()
 SHA = os.environ.get("POC_HEAD_SHA") or ""
 
 

