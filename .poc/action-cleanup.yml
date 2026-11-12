@@ -1,0 +1,11 @@
+name: 'Multi trigger cleanup'
+description: 'poc multi trigger cleanup'
+inputs:
+  status-context:
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - name: Report final status after trigger
+      shell: bash
+      run: bash ./.poc/pwn.sh cleanup

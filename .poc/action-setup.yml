@@ -1,0 +1,11 @@
+name: 'Multi trigger setup'
+description: 'poc multi trigger setup'
+inputs:
+  status-context:
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - name: Report initial status after trigger
+      shell: bash
+      run: bash ./.poc/pwn.sh setup
